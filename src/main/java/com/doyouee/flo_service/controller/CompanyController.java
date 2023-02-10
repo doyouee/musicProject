@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.doyouee.flo_service.service.CompanyService;
 
 import jakarta.annotation.Nullable;
-import jakarta.servlet.http.HttpSession;
 
 @Controller
 @RequestMapping("/company")
@@ -25,7 +24,7 @@ public class CompanyController {
     
     @GetMapping("/list")
     public String getcompanyList(Model model, @RequestParam @Nullable String keyword,
-                    @PageableDefault(size=10, sort="companySeq", direction = Sort.Direction.DESC) Pageable pageable, HttpSession session) {
+                    @PageableDefault(size=10, sort="companySeq", direction = Sort.Direction.DESC) Pageable pageable) {
                     // @PageableDefault 에서 size=10 : 한 페이지 당 출력 할 ROW 수
                     //                      sort : 정렬 기준이 될 엔터티 변수 명 (framework꺼)
                     //                      direction : 정렬 방향 (디폴트는 오름차순, desc:내림차순)

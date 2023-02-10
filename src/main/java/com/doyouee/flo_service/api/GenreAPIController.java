@@ -34,8 +34,8 @@ public class GenreAPIController { //일반 controller를 apiController로 바꿈
     @Autowired GenreService genreService;
     
     @Operation(summary = "장르 리스트", description="등록된 장르 정보를 10개 단위로 보여줍니다.")
-    @GetMapping("/list")
     @PageableAsQueryParam
+    @GetMapping("/list")
     public ResponseEntity<GenreListResponseVO> getGenreList(
         @Parameter(description = "검색어", example = "재즈") @RequestParam @Nullable String keyword,
         // @Parameter(description = "페이징처리, URL 파라미터로 요청 (예시) /api/genre/list?page=0") @PageableDefault(size=10, sort="genreSeq", direction = Sort.Direction.DESC) Pageable pageable) {

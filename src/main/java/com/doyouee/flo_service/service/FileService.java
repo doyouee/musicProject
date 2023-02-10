@@ -27,14 +27,25 @@ public class FileService {
         return targetLocation.toString();
     }
 
-    public ResponseEntity<Resource> getImageFile(String location) throws Exception {
-        Path imgLocation = Paths.get(location).normalize();
+
+    public ResponseEntity<Resource> getImageFile(String type, String filename) throws Exception {
+        Path imgLocation = Paths.get("/home/flo/images/" + type + "/" + filename).normalize();
         Resource r = new UrlResource(imgLocation.toUri());
-        String contentType = null;
-        contentType = "image/*";
+        String contentType = "application/octet-stream";
+        
         return ResponseEntity.ok().contentType(MediaType.parseMediaType(contentType))
         .header(HttpHeaders.CONTENT_DISPOSITION,
         "attachment; filename=\"" + URLEncoder.encode(r.getFilename(), "UTF-8"))
         .body(r);
     }
+    // public ResponseEntity<Resource> getImageFile(String location) throws Exception {
+    //     Path imgLocation = Paths.get(location).normalize();
+    //     Resource r = new UrlResource(imgLocation.toUri());
+    //     String contentType = null;
+    //     contentType = "image/*";
+    //     return ResponseEntity.ok().contentType(MediaType.parseMediaType(contentType))
+    //     .header(HttpHeaders.CONTENT_DISPOSITION,
+    //     "attachment; filename=\"" + URLEncoder.encode(r.getFilename(), "UTF-8"))
+    //     .body(r);
+    // }
 }

@@ -107,6 +107,7 @@ public class GenreService {
             GenreEntity entity = GenreEntity.builder().genreSeq(no).genreName(name).build();
             genreRepository.save(entity);
             resultMap.put("updated", true);
+            resultMap.put("message", "");
         }
         return resultMap;
     }
