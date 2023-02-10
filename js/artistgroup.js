@@ -27,7 +27,17 @@ document.addEventListener("DOMContentLoaded", function(){
         formData.append("img", elemId("imgfile").files[0])
         axios.put("http://localhost:8585/api/artist/group/insert", formData)
         .then(function(result) {
-            console.log(result)
+            // console.log(result)
+
+            //230210
+            alert(result.data.message);
+            elemId("name").value = ""
+            elemId("debut").value = ""
+            elemId("company").value = ""
+            elemId("imgfile").value = ""
+            elemId("preview").src = ""
+            elemId("company").value = ""
+            elemId("company_name").innerHTML = ""
         })
         .catch(function(err) {
             console.log(err)
@@ -53,9 +63,9 @@ function getCompanyList(page, keyword) {
         // url += "&keyword=" + keyword -> 파라미터 구체화 안되는 방식
         params.keyword = keyword
     }
-    console.log(params)
+    // console.log(params)
     axios.get(url, {params:params}).then(function(result) {
-        // console.log(result)
+        console.log(result)
         const list = result.data.list;
         let tbodyContent = ""
         list.forEach((item) => {
@@ -94,7 +104,19 @@ function getCompanyList(page, keyword) {
 }
 //getCompanyList()
 
+// 230209
 function selectCompany(seq, name) {
     elemId("company").value = seq
     elemId("company_name").innerHTML = name
 }
+
+// 230210
+function getArtistGroupList(page, keyword) {
+    if(page == null || page == undefined) page = 0;
+    if(keyword == null || keyword == undefined) keyword = "";
+    axios.get(baseURL+"/artist/group/list", { params : {page:page, keyword:keyword} })
+    .then(function(result) {
+        console.log(result);
+    })
+}
+getArtistGroupList();

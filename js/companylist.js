@@ -9,7 +9,7 @@ document.addEventListener("DOMContentLoaded", function() {
         // alert(name)
         axios.put("http://localhost:8585/api/company/add?name=" + name)
         .then((result) => {
-            //성공 시 (응답코드 100~399)
+            // 성공 시 (응답코드 100~399)
             console.log(result)
             if(result.data.status) {
                 alert(result.data.message)
@@ -27,9 +27,7 @@ document.addEventListener("DOMContentLoaded", function() {
             console.log(error)
         })
     })
-})
         
-document.addEventListener("DOMContentLoaded", function() {
 
     // DOMContentLoaded : HTML 파일의 모든 내용을 DOM으로 로드 완료한 시점
     // 브라우저에서 HTML을 모두 로드 한 시점
@@ -122,9 +120,11 @@ document.addEventListener("DOMContentLoaded", function() {
     })
 })
 
+
+
 function deleteCategory(no) { // 삭제 버튼 기능 추가(바로 삭제되지 않도록)
     if( !confirm("카테고리를 삭제하시겠습니까?") ) return
-    alert(no + "번 카테고리 삭제");
+    // alert(no + "번 카테고리 삭제");
     //delete 하려면 axios로 deleteMapping 을 불러와야한다.
     axios.delete("http://localhost:8585/api/company/delete?company_no="+no).then(function(result){
         // console.log(result)

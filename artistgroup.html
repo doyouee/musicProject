@@ -8,17 +8,44 @@
     <script src="js/artistgroup.js"></script>
 </head>
 <body>
-    <input type="file" accept="image/jpeg, image/png, image/gif", id="imgfile">
-    <!-- <input type="file" accept="image/*"> 이미지 유형 전체 파일들  -->
-    <img src="" id="preview"><br>
 
-    <span>아티스트 그룹 명</span> <input type="text" id="name"><br>
-    <span>데뷔연도</span> <input type="number" id="debut"><br>
-    <span>기획사</span> <!-- 230209 -->
+    <!-- 230210 -->
+    <div class="artist_grp_list">
+        <div class="artist_grp_search">
+            <form id="artist_grp_search_form">
+                <input type="text" id="artist_grp_keyword" placeholder="그룹명">
+                <button id="artist_grp_search">검색</button>
+            </form>
+        </div>
+        <table>
+            <thead>
+                <tr>
+                    <th>번호</th> <th>이미지</th> <th>그룹명</th> <th>데뷔연도</th> <th>소속사</th> <th></th>
+                </tr>
+            </thead>
+            <tbody>
+
+            </tbody>
+        </table>
+        <div class="artist_grp_pager">
+
+        </div>
+    </div>
+    <div class="artist_grp_add_area">
+        <h2>아티스트 그룹 추가</h2>
+
+        <input type="file" accept="image/jpeg, image/png, image/gif", id="imgfile">
+        <!-- <input type="file" accept="image/*"> 이미지 유형 전체 파일들  -->
+        <img src="" id="preview"><br>
+        
+        <span>아티스트 그룹 명</span> <input type="text" id="name"><br>
+        <span>데뷔연도</span> <input type="number" id="debut"><br>
+        <span>기획사</span> <!-- 230209 -->
         <input type="number" id="company" hidden>
         <span id="company_name"> - </span>
         <button id="company_sel">기획사 선택</button><br>
-    <button id="save">저장</button>
+        <button id="save">저장</button>
+    </div>
     
     <!-- 230209 -->
     <div class="company_wrap">
