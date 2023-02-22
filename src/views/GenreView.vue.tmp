@@ -1,0 +1,127 @@
+<template>
+    <!-- htnml -->
+    <h2>장르 정보</h2>
+    <div id="genre_list_area">
+        <table>
+            <thead>
+                <tr>
+                    <th>번호</th>
+                    <th>장르명</th>
+                    <th>
+                        <button @click="addGenre()">장르추가</button>
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr v-for="item in list" :key="item.seq">
+                    <td>{{ item.seq }}</td>
+                    <td>
+                        <button class="genre_name" @click="genreDetail(item.seq)">{{ item.name }}</button>
+                    </td>
+                    <td>
+                        <button @click="deleteGenre(item.seq)">삭제</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <div class="search_area">
+            <br>
+            <input type="text" v-model="keyword">
+            <button @click="search()">검색</button>
+        </div>
+        <div class="pager_area">
+            <br>
+            <button class="pager" v-for="p in totalPage" :key="p" @click="pagerClick(p-1)">{{ p }}</button>
+            <GenrePopup :mode="popupMode" :genre="selected" v-if="popup" @closePopup="closePopup()" />
+        </div>
+    </div>
+</template>
+
+<script>
+    // import axios from 'axios'
+    // import GenrePopup from './components/GenrePopup.vue' //.-현재위치기준(상대경로)
+    import GenrePopup from '@/components/GenrePopup.vue' //둘다 가능. @-src폴더를 의미(절대경로)
+    export default {
+        name: 'GenreView',
+        components: {
+            GenrePopup
+        },
+        data() {
+            return {
+                list: null,
+                currentPage: 0,
+                keyword: "",
+                totalPage: 0,
+                popup: false,
+                popupMode: "add",
+                selected: null
+            }
+        },
+        created() { //초기화
+            this.loadGenreList()
+        },
+        methods: {
+            deleteGenre(seq) {
+                if (!confirm("삭제하시겠습니까? 삭제된데이터는 되돌릴 수 없습니다.")) return
+                this.$http.delete("/api/genre/delete?genre_no=" + seq)
+                    .then((r) => {
+                        alert(r.data.message)
+                        location.reload()
+                    })
+            },
+            genreDetail(seq) {
+                this.popup = true
+                this.popupMode = "update"
+                //list에 있는 요소들을 순차적으로 조회하면서 genreSeq값이 파라미터의 seq 값과 일치하는 것만
+                //걸러낸 새로운 리스트를 만들어서 selected에 저장
+                this.selected = this.list.filter((data) => data.genreSeq == seq)[0] //첫번째 거만 가져옴
+                this.no = seq
+                console.log(this.list)
+                console.log(this.selected)
+            },
+            loadGenreList() {
+                this.$http.get("/api/genre/list", {
+                        params: {
+                            page: this.currentPage,
+                            keyword: this.keyword
+                        }
+                    })
+                    .then((e) => {
+                        this.list = e.data.list
+                        this.totalPage = e.data.totalPage
+
+                    })
+            },
+            pagerClick(page) {
+                this.currentPage = page
+                this.loadGenreList()
+            },
+            search() {
+                this.currentPage = 0
+                this.loadGenreList()
+            },
+            addGenre() {
+                this.popup = true
+                this.popupMode = "add"
+            },
+            closePopup() {
+                this.popup = false
+                this.selected = null
+            }
+        },
+        watch: { //변경 값 감지
+            //data - currentPage의 값이 변경 되었을때만 실행
+            //같은 값을 세팅하면 실행되지않음
+            currentPage( /* value, oldValue */ ) {
+                console.log("currentPage changed")
+                // console.log(value)
+                // console.log(oldValue)
+                this.loadGenreList() //1페이지에서 1페이지를 누르면 창이 변경되지않음!!
+            }
+        }
+    }
+</script>
+
+<style>
+    /* css */
+</style>

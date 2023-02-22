@@ -1,0 +1,107 @@
+<template>
+    <div>
+        <h2>기획사 정보</h2>
+        <div id="company_list_area">
+            <table>
+                <thead>
+                    <th>번호</th>
+                    <th>기획사 명</th>
+                    <th>
+                        <button @click="addCompany()">기획사 추가</button>
+                    </th>
+                </thead>
+                <tbody>
+                    <tr v-for="item in list" :key="item.seq">
+                        <td>{{ item.seq }}</td>
+                        <button class="company_name" @click="companyDetail(item.seq)">{{ item.name }}</button>
+                        <td>
+                            <button @click="deleteCompany(item.seq)">삭제</button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="search_area">
+            <br>
+            <input type="text" v-model="keyword">
+            <button @click="search()">검색</button>
+        </div>
+        <div class="pager_area">
+            <br>
+            <button class="pager" v-for="p in totalPage" :key="p" @click="pagerClick(p-1)">{{ p }}</button>
+        </div>
+        <CompanyPopup :mode="popupMode" :company="selected" v-if="popup" @closePopup="closePopup()" />
+    </div>
+</template>
+
+<script>
+    import CompanyPopup from "@/components/CompanyPopup.vue"
+    export default {
+        name: "CompanyView",
+        components:{CompanyPopup},
+        data() {
+            return {
+                list: null,
+                currentPage: 0,
+                totalPage: 0,
+                keyword: null,
+                popup: false,
+                popupMode: "add",
+                selected: null
+            }
+        },
+        created() {
+            this.loadCompanyList()
+        },
+        methods: {
+            loadCompanyList() {
+                this.$http.get("/api/company/list", {
+                        params: {
+                            page: this.currentPage,
+                            keyword: this.keyword
+                        }
+                    })
+                    .then((r) => {
+                        this.list = r.data.list
+                        this.totalPage = r.data.totalPage
+                        this.currentPage = r.data.currentPage
+
+                    })
+            },
+            deleteCompany(seq) {
+                if (!confirm("삭제하시겠습니까? 삭제된데이터는 되돌릴 수 없습니다.")) return
+                this.$http.delete("/api/company/delete?company_no=" + seq)
+                    .then((r) => {
+                        alert(r.data.message)
+                        location.reload()
+                    })
+            },
+            companyDetail(seq) {
+                this.popup = true
+                this.popupMode = "update"
+                this.selected = this.list.filter((data) => data.pubSeq == seq)[0] //첫번째 거만 가져옴
+                this.no = seq
+                console.log(this.list)
+                console.log(this.selected)
+            },
+            pagerClick(page) {
+                this.currentPage = page
+                this.loadCompanyList()
+            },
+            search() {
+                this.currentPage = 0
+                this.loadCompanyList()
+            },
+            addCompany() {
+                this.popup = true
+                this.popupMode = "add"
+            },
+            closePopup() {
+                this.popup = false
+                this.selected = null
+            }
+        }
+    }
+</script>
+<style>
+</style>
