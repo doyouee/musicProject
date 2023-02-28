@@ -4,13 +4,41 @@
             <router-link to="/main/genre">장르정보</router-link> <!-- a태그임 -->
             <router-link to="/main/company">기획사정보</router-link> <!-- a태그임 -->
         </nav>
+        <div class="user_box">
+            <span>{{ userinfo.admin_id }}</span>
+            <span>{{ userinfo.admin_name }}님</span>
+            <button @click="logout()">로그아웃</button>
+        </div>
     </div>
     <router-view></router-view>
 </template>
 
 <script>
     export default {
-        name:"MainView"
+        name:"MainView",
+        data() {
+            return {
+                userinfo: null
+            }
+        },
+        beforeCreate() {
+            if(sessionStorage.getItem('userToken') == '' || sessionStorage.getItem('userToken') == null) {
+                alert("로그인이 필요합니다.")
+                location.href="/"
+            }
+        },
+        created() {
+            this.userinfo = JSON.parse(sessionStorage.getItem("userinfo"));
+        },
+        methods: {
+            logout() {
+                if(confirm("로그아웃 하시겠습니까?")) {
+                    sessionStorage.removeItem('userToken')
+                    sessionStorage.removeItem('userInfo')
+                    location.href = "/"
+                }
+            }
+        }
     }
 </script>
 

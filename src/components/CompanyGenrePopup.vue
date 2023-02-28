@@ -42,6 +42,7 @@
             saveInfo(){
                 let url = ""
                 let reqMethod=""
+                let token = sessionStorage.getItem('userToken')
                 if(this.mode=="add"){
                     url= this.apiUrl + "/add?name="+this.name
                     reqMethod="put"
@@ -50,8 +51,14 @@
                     url= this.apiUrl + "/update?name="+this.name+"&no="+this.seq
                     reqMethod="patch"
                 }
+                // this.$http.put("/api/genre/add?name="+this.name)
                 // this.errMsg=""
-                this.$http({method:reqMethod, url:url })
+                this.$http({
+                    method:reqMethod, url:url,
+                    headers: {
+                        Authorization: `Bearer ${token}`
+                    }
+                })
                 .then((r)=>{
                     if(r.data.status){
                         alert(this.title + "정보를 "+this.type+"했습니다.")

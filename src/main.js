@@ -7,13 +7,14 @@ import router from './router'
 const app = createApp(App).use(router)
 // Vue.prototype.$http=axios;
 
-app.config.globalProperties.bulidMode = "DEVELOP"
+app.config.globalProperties.$bulidMode = "DEVELOP"
+app.config.globalProperties.$userToken = ""
 //기본 URL설정
-if(app.config.globalProperties.bulidMode=="DEVELOP"){
+if(app.config.globalProperties.$bulidMode=="DEVELOP"){
     // 개발 server
     axios.defaults.baseURL="http://localhost:8586"
 }
-if(app.config.globalProperties.bulidMode=="RELEASE"){
+if(app.config.globalProperties.$bulidMode=="RELEASE"){
     // 운영 server
     axios.defaults.baseURL="http://flo.com:8585"
 }

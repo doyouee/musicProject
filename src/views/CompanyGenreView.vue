@@ -64,7 +64,13 @@
         },
         methods: {
             loadList() {
-                this.$http.get(this.apiUrl + "/list", {
+                let token = sessionStorage.getItem('userToken')
+                console.log(token)
+                this.$http.get(this.apiUrl + "/list", 
+                    {
+                        headers: {
+                            Authorization: `Bearer ${token}`
+                        },
                         params: {
                             page: this.currentPage,
                             keyword: this.keyword
@@ -80,7 +86,13 @@
             },
             deleteData(seq) {
                 if (!confirm("삭제하시겠습니까? 삭제된데이터는 되돌릴 수 없습니다.")) return
-                this.$http.delete(this.apiUrl + "/delete?no=" + seq)
+                let token = sessionStorage.getItem('userToken')
+                this.$http.delete(this.apiUrl + "/delete?no=" + seq,
+                    {
+                        headers: {
+                            Authorization: `Bearer ${token}`
+                        }
+                    })
                     .then((r) => {
                         alert(r.data.message)
                         location.reload()
