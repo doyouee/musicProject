@@ -9,6 +9,6 @@ import com.doyouee.flo_service.entity.GenreEntity;
 
 @Repository
 public interface GenreRepository extends JpaRepository<GenreEntity, Long> {
-    public Page<GenreEntity> findByGenreNameContains(String genreName, Pageable pageable);
-    public Integer countByGenreName(String genreName);
+    public Page<GenreEntity> findByNameContains(String name, Pageable pageable);
+    public Integer countByName(String name);
 }

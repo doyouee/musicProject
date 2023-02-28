@@ -19,6 +19,6 @@ import lombok.NoArgsConstructor;
 @Builder
 public class CompanyEntity {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "pci_seq")     private Long pubSeq; 
-    @Column(name = "pci_name")    private String pubName;     
+    @Column(name = "pci_seq")     private Long seq; 
+    @Column(name = "pci_name")    private String name;     
 }

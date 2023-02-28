@@ -20,7 +20,7 @@ public class CompanyService {
 
     // 장르 리스트
     public Map<String, Object> getCompanyList(String keyword, Pageable pageable) {
-        Page<CompanyEntity> page = companyRepository.findByPubNameContains(keyword, pageable);
+        Page<CompanyEntity> page = companyRepository.findByNameContains(keyword, pageable);
         Map<String, Object> map = new LinkedHashMap<String, Object>();
         map.put("list", page.getContent());
         map.put("total", page.getTotalElements());
@@ -33,9 +33,9 @@ public class CompanyService {
     // 장르 추가하기
     public Map<String, Object> addCompanyInfo(String name) {
         Map<String, Object> resultMap = new LinkedHashMap<String, Object>();
-        if(companyRepository.countByPubName(name) == 0) {
+        if(companyRepository.countByName(name) == 0) {
             // 입력한 키워드의 장르가 없음
-            CompanyEntity entity = CompanyEntity.builder().pubName(name).build();
+            CompanyEntity entity = CompanyEntity.builder().name(name).build();
             companyRepository.save(entity);
             resultMap.put("status", true);
             resultMap.put("message", "장르 정보를 추가하였습니다.");
@@ -65,8 +65,8 @@ public class CompanyService {
         }
         else {
             resultMap.put("status", true);
-            resultMap.put("no", entityOpt.get().getPubSeq());
-            resultMap.put("name", entityOpt.get().getPubName());
+            resultMap.put("no", entityOpt.get().getSeq());
+            resultMap.put("name", entityOpt.get().getName());
         }
         return resultMap;
     }
@@ -77,27 +77,27 @@ public class CompanyService {
         Map<String, Object> resultMap = new LinkedHashMap<String, Object>();
         Optional<CompanyEntity> entityOpt = companyRepository.findById(no);
         if(entityOpt.isEmpty()) {
-            resultMap.put("updated", false);
+            resultMap.put("status", false);
             resultMap.put("no", no);
             resultMap.put("name", name);
             resultMap.put("message", "잘못된 장르 정보입니다.");
         }
-        else if(entityOpt.get().getPubName().equalsIgnoreCase(name)) {
-            resultMap.put("updated", false);
+        else if(entityOpt.get().getName().equalsIgnoreCase(name)) {
+            resultMap.put("status", false);
             resultMap.put("no", no);
             resultMap.put("name", name);
             resultMap.put("message", "기존에 있는 장르명으로 변경 불가능합니다.");
         }
-        else if(companyRepository.countByPubName(name) != 0) {
-            resultMap.put("updated", false);
+        else if(companyRepository.countByName(name) != 0) {
+            resultMap.put("status", false);
             resultMap.put("no", no);
             resultMap.put("name", name);
             resultMap.put("message", "이미 존재하는 장르입니다.");
         }
         else {
-            CompanyEntity entity = CompanyEntity.builder().pubSeq(no).pubName(name).build();
+            CompanyEntity entity = CompanyEntity.builder().seq(no).name(name).build();
             companyRepository.save(entity);
-            resultMap.put("updated", true);
+            resultMap.put("status", true);
         }
         return resultMap;
     }

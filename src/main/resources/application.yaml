@@ -1,7 +1,7 @@
 # JSON 스러운 방법 : 얘가 최신 방법
 
 server:
-    port: 8585
+    port: 8586
 
 
 spring:
@@ -52,3 +52,9 @@ springdoc:
     paths-to-match:
         # 문서로 만들 API 요청 경로 목록 (요청 경로가 /api/ 로 시작하면 모두 문서화)
         - /api/**
+
+jwt:
+    secretKey: dfjwonlxkzlitgzdlkzntiqowzlkejwprkzxwlektojfhslxclkejotijbtsaoitymkcxghjtksdklajtls
+permission:
+    permit-all-urls:
+        - /api/admin/login

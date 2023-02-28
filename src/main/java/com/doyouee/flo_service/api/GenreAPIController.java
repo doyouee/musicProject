@@ -40,7 +40,7 @@ public class GenreAPIController { //일반 controller를 apiController로 바꿈
         @Parameter(description = "검색어", example = "재즈") @RequestParam @Nullable String keyword,
         // @Parameter(description = "페이징처리, URL 파라미터로 요청 (예시) /api/genre/list?page=0") @PageableDefault(size=10, sort="genreSeq", direction = Sort.Direction.DESC) Pageable pageable) {
         @Parameter(hidden = true)
-        @PageableDefault(size=10, sort="genreSeq", direction = Sort.Direction.DESC) Pageable pageable) {
+        @PageableDefault(size=10, sort="seq", direction = Sort.Direction.DESC) Pageable pageable) {
         // @PageableDefault 에서 size=10 : 한 페이지 당 출력 할 ROW 수
         //                      sort : 정렬 기준이 될 엔터티 변수 명 (framework꺼)
         //                      direction : 정렬 방향 (디폴트는 오름차순, desc:내림차순)
@@ -60,14 +60,14 @@ public class GenreAPIController { //일반 controller를 apiController로 바꿈
 
 
     @GetMapping("/detail")
-    public ResponseEntity<Object> getGenreDetail(@RequestParam Long genre_no,
+    public ResponseEntity<Object> getGenreDetail(@RequestParam Long no,
         // 보고있던 페이지 정보 받아오는 방법
         @RequestParam @Nullable Integer page,
         // 키워드 검색 페이지로 다시 돌아가는 방법
         @RequestParam @Nullable String keyword) {
         if(page == null) {  page = 0;   } // 보고있던 페이지가 없었다면 첫 페이지로 이동
         if(keyword == null) {   keyword = "";   }
-        Map<String, Object> map = genreService.selectGenreInfo(genre_no);
+        Map<String, Object> map = genreService.selectGenreInfo(no);
         // map.put("message", null);
         // model.addAttribute("genre", map);
         // model.addAttribute("page", page); // 보고 있던 페이지 정보를 전달
@@ -89,9 +89,9 @@ public class GenreAPIController { //일반 controller를 apiController로 바꿈
     
     
     @DeleteMapping("/delete")
-    public ResponseEntity<Object> getGenreDelete(@RequestParam Long genre_no) {
+    public ResponseEntity<Object> getGenreDelete(@RequestParam Long no) {
         Map<String, Object> map = new LinkedHashMap<String, Object>();
-        genreService.deleteGenre(genre_no);
+        genreService.deleteGenre(no);
         map.put("message", "장르 정보를 삭제했습니다.");
         return new ResponseEntity<>(map, HttpStatus.ACCEPTED);
     }

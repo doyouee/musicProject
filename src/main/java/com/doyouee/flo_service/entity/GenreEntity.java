@@ -10,7 +10,6 @@ import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Data
@@ -23,9 +22,9 @@ public class GenreEntity {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "genre_seq")   
     @Schema(description = "장르 번호", example = "1")
-    private Long genreSeq; 
+    private Long seq; 
     
     @Column(name = "genre_name")    
     @Schema(description = "장르 명", example = "JAZZ")
-    private String genreName;     
+    private String name;     
 }

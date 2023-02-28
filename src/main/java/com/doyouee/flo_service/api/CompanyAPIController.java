@@ -29,7 +29,7 @@ public class CompanyAPIController { //일반 controller를 apiController로 바�
     
     @GetMapping("/list")
     public ResponseEntity<Object> getCompanyList(@RequestParam @Nullable String keyword,
-                    @PageableDefault(size=10, sort="pubSeq", direction = Sort.Direction.DESC) Pageable pageable) {
+                    @PageableDefault(size=10, sort="seq", direction = Sort.Direction.DESC) Pageable pageable) {
                     // @PageableDefault 에서 size=10 : 한 페이지 당 출력 할 ROW 수
                     //                      sort : 정렬 기준이 될 엔터티 변수 명 (framework꺼)
                     //                      direction : 정렬 방향 (디폴트는 오름차순, desc:내림차순)
@@ -49,14 +49,14 @@ public class CompanyAPIController { //일반 controller를 apiController로 바�
 
 
     @GetMapping("/detail")
-    public ResponseEntity<Object> getCompanyDetail(@RequestParam Long company_no,
+    public ResponseEntity<Object> getCompanyDetail(@RequestParam Long no,
         // 보고있던 페이지 정보 받아오는 방법
         @RequestParam @Nullable Integer page,
         // 키워드 검색 페이지로 다시 돌아가는 방법
         @RequestParam @Nullable String keyword) {
         if(page == null) {  page = 0;   } // 보고있던 페이지가 없었다면 첫 페이지로 이동
         if(keyword == null) {   keyword = "";   }
-        Map<String, Object> map = companyService.selectCompanyInfo(company_no);
+        Map<String, Object> map = companyService.selectCompanyInfo(no);
         // map.put("message", null);
         // model.addAttribute("company", map);
         // model.addAttribute("page", page); // 보고 있던 페이지 정보를 전달
@@ -78,9 +78,9 @@ public class CompanyAPIController { //일반 controller를 apiController로 바�
     
     
     @DeleteMapping("/delete")
-    public ResponseEntity<Object> getCompanyDelete(@RequestParam Long company_no) {
+    public ResponseEntity<Object> getCompanyDelete(@RequestParam Long no) {
         Map<String, Object> map = new LinkedHashMap<String, Object>();
-        companyService.deleteCompany(company_no);
+        companyService.deleteCompany(no);
         map.put("message", "기획사 정보를 삭제했습니다.");
         return new ResponseEntity<>(map, HttpStatus.ACCEPTED);
     }

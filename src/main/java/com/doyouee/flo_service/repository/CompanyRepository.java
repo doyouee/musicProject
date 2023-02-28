@@ -9,6 +9,6 @@ import com.doyouee.flo_service.entity.CompanyEntity;
 
 @Repository
 public interface CompanyRepository extends JpaRepository<CompanyEntity, Long> {
-    public Page<CompanyEntity> findByPubNameContains(String companyName, Pageable pageable);
-    public Integer countByPubName(String companyName);
+    public Page<CompanyEntity> findByNameContains(String companyName, Pageable pageable);
+    public Integer countByName(String companyName);
 }

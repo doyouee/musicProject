@@ -13,6 +13,13 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
 
 @Data
 @NoArgsConstructor
@@ -21,7 +28,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @DynamicInsert
 @Table(name = "admin_info")
-public class AdminEntity {
+public class AdminEntity implements UserDetails {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "admin_seq")         private Long adminSeq;
     @Column(name = "admin_id")          private String adminId;
@@ -29,5 +36,42 @@ public class AdminEntity {
     @Column(name = "admin_name")        private String adminName;
     @Column(name = "admin_status")      @ColumnDefault("1")     private Integer adminStatus;
     @Column(name = "admin_grade")       private Integer adminGrade;
+    @Column(name = "admin_role")        private String adminRole;
 
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        Set<GrantedAuthority> roles = new HashSet<>();
+        roles.add(new SimpleGrantedAuthority(this.adminRole));
+        return roles;
+    }
+
+    @Override
+    public String getPassword() {
+        return this.adminPwd;
+    }
+
+    @Override
+    public String getUsername() {
+        return this.adminId;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return this.adminStatus == 1;
+    }
 }

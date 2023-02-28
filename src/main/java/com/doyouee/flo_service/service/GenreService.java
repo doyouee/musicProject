@@ -22,7 +22,7 @@ public class GenreService {
     // 장르 리스트
     // public Map<String, Object> getGenreList(String keyword, Pageable pageable) {
     public GenreListResponseVO getGenreList(String keyword, Pageable pageable) {
-        Page<GenreEntity> page = genreRepository.findByGenreNameContains(keyword, pageable);
+        Page<GenreEntity> page = genreRepository.findByNameContains(keyword, pageable);
         GenreListResponseVO response = GenreListResponseVO.builder()
             .list(page.getContent())
             .total(page.getTotalElements())
@@ -42,9 +42,9 @@ public class GenreService {
     // 장르 추가하기
     public Map<String, Object> addGenreInfo(String name) {
         Map<String, Object> resultMap = new LinkedHashMap<String, Object>();
-        if(genreRepository.countByGenreName(name) == 0) {
+        if(genreRepository.countByName(name) == 0) {
             // 입력한 키워드의 장르가 없음
-            GenreEntity entity = GenreEntity.builder().genreName(name).build();
+            GenreEntity entity = GenreEntity.builder().name(name).build();
             genreRepository.save(entity);
             resultMap.put("status", true);
             resultMap.put("message", "장르 정보를 추가하였습니다.");
@@ -74,8 +74,8 @@ public class GenreService {
         }
         else {
             resultMap.put("status", true);
-            resultMap.put("no", entityOpt.get().getGenreSeq());
-            resultMap.put("name", entityOpt.get().getGenreName());
+            resultMap.put("no", entityOpt.get().getSeq());
+            resultMap.put("name", entityOpt.get().getName());
         }
         return resultMap;
     }
@@ -86,27 +86,27 @@ public class GenreService {
         Map<String, Object> resultMap = new LinkedHashMap<String, Object>();
         Optional<GenreEntity> entityOpt = genreRepository.findById(no);
         if(entityOpt.isEmpty()) {
-            resultMap.put("updated", false);
+            resultMap.put("status", false);
             resultMap.put("no", no);
             resultMap.put("name", name);
             resultMap.put("message", "잘못된 장르 정보입니다.");
         }
-        else if(entityOpt.get().getGenreName().equalsIgnoreCase(name)) {
-            resultMap.put("updated", false);
+        else if(entityOpt.get().getName().equalsIgnoreCase(name)) {
+            resultMap.put("status", false);
             resultMap.put("no", no);
             resultMap.put("name", name);
             resultMap.put("message", "기존에 있는 장르명으로 변경 불가능합니다.");
         }
-        else if(genreRepository.countByGenreName(name) != 0) {
-            resultMap.put("updated", false);
+        else if(genreRepository.countByName(name) != 0) {
+            resultMap.put("status", false);
             resultMap.put("no", no);
             resultMap.put("name", name);
             resultMap.put("message", "이미 존재하는 장르입니다.");
         }
         else {
-            GenreEntity entity = GenreEntity.builder().genreSeq(no).genreName(name).build();
+            GenreEntity entity = GenreEntity.builder().seq(no).name(name).build();
             genreRepository.save(entity);
-            resultMap.put("updated", true);
+            resultMap.put("status", true);
             resultMap.put("message", "");
         }
         return resultMap;
